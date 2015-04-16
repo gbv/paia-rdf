@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="de_DE">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Jakob Voß" />
+  <meta name="date" content="2015-04-16" />
+  <title>PAIA Ontology</title>
+  <link rel="alternate" type="application/rdf+xml" href="paia.owl" />
+   <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <style type="text/css">
+/*<![CDATA[*/
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+/*]]>*/
+  </style>
+  <style type="text/css">
+  body { font-family: sans-serif; }
+  a { text-decoration: none }
+  a:hover { text-decoration: underline }
+  h1 { font: 170% sans-serif }
+  h1.title { font-size: 200%; font-weight: bold; }
+  h2 { font: 140% sans-serif }
+  h3 { font: 120% sans-serif }
+  dt { font-weight: bold; }
+  h1, h2, h3, h1 a, h2 a, h3 a { color: #005A9C; }
+  table { border-collapse: collapse; }
+  td { border: 1px solid #999; padding: 3px }
+  dl p { margin-top: 0; }
+  dt { margin-top: 0.8em; }
+  dd { margin-left: 1.5em; }
+  ol { margin-bottom: 1em; }
+  table + p { margin-top: 1em; }
+  </style>
+</head>
+<body>
+<a href="http://github.com/gbv/paia-rdf/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
+<header>
+<h1 class="title">PAIA Ontology</h1>
+<h3 class="author">Jakob Voß</h3>
+<h4 class="date">2015-04-16 (version 0.1.0)</h4>
+</header>
+
+<h1>Table of Contents</h1>
+<nav id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#overview"><span class="toc-section-number">2</span> Overview</a><ul>
+<li><a href="#namespaces-and-ontology"><span class="toc-section-number">2.1</span> Namespaces and Ontology</a></li>
+<li><a href="#patrons-in-rdf"><span class="toc-section-number">2.2</span> Patrons in RDF</a></li>
+<li><a href="#items-in-rdf"><span class="toc-section-number">2.3</span> Items in RDF</a></li>
+<li><a href="#fees-in-rdf"><span class="toc-section-number">2.4</span> Fees in RDF</a></li>
+<li><a href="#paia-data-types-in-rdf"><span class="toc-section-number">2.5</span> PAIA data types in RDF</a><ul>
+<li><a href="#document-data-type"><span class="toc-section-number">2.5.1</span> Document data type</a></li>
+<li><a href="#patron"><span class="toc-section-number">2.5.2</span> patron</a></li>
+<li><a href="#items"><span class="toc-section-number">2.5.3</span> items</a></li>
+<li><a href="#request"><span class="toc-section-number">2.5.4</span> request</a></li>
+<li><a href="#renew"><span class="toc-section-number">2.5.5</span> renew</a></li>
+<li><a href="#cancel"><span class="toc-section-number">2.5.6</span> cancel</a></li>
+<li><a href="#fees"><span class="toc-section-number">2.5.7</span> fees</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#references"><span class="toc-section-number">3</span> References</a><ul>
+<li><a href="#normative-references"><span class="toc-section-number">3.1</span> Normative References</a></li>
+<li><a href="#informative-references"><span class="toc-section-number">3.2</span> Informative References</a></li>
+<li><a href="#revision-history"><span class="toc-section-number">3.3</span> Revision history</a></li>
+</ul></li>
+</ul>
+</nav>
+<section id="introduction" class="level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>The <strong>PAIA Ontology</strong> defines an encoding of library patron account information in RDF. The Ontology aligned with <a href="http://gbv.github.io/paia">Patrons Account Information API (PAIA)</a> by giving a mapping of PAIA core request parameters and JSON response to RDF.</p>
+<p>Updates and sources of this document can be found in a public git repository at <a href="http://github.com/gbv/paia-rdf">http://github.com/gbv/paia-rdf</a>. The master file <a href="https://github.com/gbv/paia/blob/master/paia.md">paia.md</a> is written in <a href="http://johnmacfarlane.net/pandoc/demo/example9/pandocs-markdown.html">Pandoc’s Markdown</a>. PAIA Ontology in <a href="paia.ttl">in RDF/Turtle</a>, <a href="paia.owl">in RDF/XML</a> and this HTML document are generated from the master file with <a href="https://github.com/jakobib/makespec">makespec</a>. The specification can be distributed freely under the terms of CC-BY-SA.</p>
+<p><strong><em>THIS DOCUMENT IS AN INCOMPLETE DRAFT</em></strong></p>
+</section>
+<section id="overview" class="level1">
+<h1><span class="header-section-number">2</span> Overview</h1>
+<p>PAIA Ontology reuses classes and properties from other ontologies and defines a small set of additional classes, properties, and individuals to express information about <a href="#patrons-in-rdf">patrons in RDF</a>, <a href="#documents-in-rdf">documents in RDF</a>, and <a href="#fees-in-rdf">fees in RDF</a>.</p>
+<p>RDF Serializations of PAIA Ontology are available in RDF/Turtle (<a href="./paia.ttl"><strong><code>paia.ttl</code></strong></a>) and in RDF/XML (<a href="./paia.owl"><strong><code>paia.owl</code></strong></a>).</p>
+<section id="namespaces-and-ontology" class="level2">
+<h2><span class="header-section-number">2.1</span> Namespaces and Ontology</h2>
+<p>The URI namespace of PAIA ontology is <a href="http://purl.org/ontology/paia#">http://purl.org/ontology/paia#</a>. The namespace prefix <code>paia</code> is recommended. The URI of PAIA ontology as a whole is <a href="http://purl.org/ontology/paia">http://purl.org/ontology/paia</a>.</p>
+<pre class="ttl"><code>@prefix paia: &lt;http://purl.org/ontology/paia#&gt; .
+@base         &lt;http://purl.org/ontology/paia&gt; .</code></pre>
+<p>The following namspace prefixes are used to refer to related ontologies:</p>
+<pre class="ttl"><code>@prefix bibo:    &lt;http://purl.org/ontology/bibo/&gt; .
+@prefix cc:      &lt;http://creativecommons.org/ns#&gt; .
+@prefix daia:    &lt;http://purl.org/ontology/daia/&gt; .
+@prefix dct:     &lt;http://purl.org/dc/terms/&gt; .
+@prefix dso:     &lt;http://purl.org/ontology/dso#&gt; .
+@prefix frbr:    &lt;http://purl.org/vocab/frbr/core#&gt; .
+@prefix holding: &lt;http://purl.org/ontology/holding#&gt; .
+@prefix owl:     &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix rdfs:    &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix ssso:    &lt;http://purl.org/ontology/ssso#&gt; .
+@prefix vann:    &lt;http://purl.org/vocab/vann/&gt; .
+@prefix voaf:    &lt;http://purl.org/vocommons/voaf#&gt; .
+@prefix xsd:     &lt;http://www.w3.org/2001/XMLSchema#&gt; .</code></pre>
+<p>PAIA Ontology is defined in RDF/Turtle as following:</p>
+<pre class="ttl"><code>&lt;&gt; a owl:Ontology, voaf:Vocabulary ;
+    dct:title &quot;PAIA Ontology&quot;@en ;
+    rdfs:label &quot;PAIA&quot; ;
+    vann:preferredNamespacePrefix &quot;paia&quot; ;
+    vann:preferredNamespaceUri &quot;http://purl.org/ontology/paia#&quot; ;
+    dct:description &quot;An ontology to express library patron information, such as loans, reservations, and fees.&quot;@en ;
+    dct:modified &quot;2015-04-16&quot;^^xsd:date ;
+    owl:versionInfo &quot;0.1.0&quot; ;
+    cc:license &lt;http://creativecommons.org/licenses/by/3.0/&gt; ;
+    dct:creator &quot;Jakob Voß&quot; . </code></pre>
+</section>
+<section id="patrons-in-rdf" class="level2">
+<h2><span class="header-section-number">2.2</span> Patrons in RDF</h2>
+<p>A patron account, as returned by the PAIA core method <a href="#patron">patron</a> is represented by an instance of the class <strong>paia:PatronAccount</strong>. Every patron account is also an instance of <a href="http://rdfs.org/sioc/ns#User">sioc:User</a> (and therefore also of <a href="http://xmlns.com/foaf/0.1/OnlineAccount">foaf:OnlineAccount</a>) and an instance of <a href="http://purl.org/vocab/participation/schema#Role">particip:Role</a>. The date of expiration can be expressed with <a href="http://purl.org/vocab/participation/schema#endDate">particip:endDate</a>. The patron identifier is given with <a href="http://xmlns.com/foaf/0.1/AccountName">foaf:AccountName</a>.</p>
+<p>A patron account belongs to a person or another <a href="http://xmlns.com/foaf/0.1/Agent">foaf:Agent</a>, connected to with <a href="http://rdfs.org/sioc/ns#account_of">sioc:account_of</a> and <a href="http://xmlns.com/foaf/0.1/account">foaf:account</a>. The full name of a patron is given with <a href="http://xmlns.com/foaf/0.1/name">foaf:name</a> and its email address can be given with <a href="http://xmlns.com/foaf/0.1/mbox">foaf:mbox</a>. The address field SHOULD NOT be mapped to RDF properties such as <a href="http://schema.org/address">schema:address</a> and <a href="www.w3.org/TR/vcard-rdf/">vcard:hasAddress</a> which expect a structured object instead of a plain literal value. The generic property <a href="http://live.dbpedia.org/property/address">dbp:address</a> can be used instead.</p>
+<pre class="ttl"><code>@prefix sioc:     &lt;http://rdfs.org/sioc/ns#&gt; .
+@prefix foaf:     &lt;http://xmlns.com/foaf/0.1/&gt; .
+@prefix particip: &lt;http://purl.org/vocab/participation/schema#&gt; .
+
+paia:PatronAccount a owl:Class ;
+    rdfs:label &quot;PatronAccount&quot;@en ;
+    rdfs:subClassOf sioc:User, foaf:OnlineAccount, particip:Role ;
+    rdfs:isDefinedBy &lt;&gt; ;
+    rdfs:seeAlso
+        sioc:account_of, foaf:account, particip:endDate, 
+        foaf:name, foaf:mbox . </code></pre>
+<p>An instance of paia:patronAccount is assumed to be active, unless it is also an instance of <strong>paia:InactivePatronAccount</strong>.</p>
+<pre class="ttl"><code>paia:InactivePatronAccount a owl:Class ;
+    rdfs:label &quot;InactivePatronAccount&quot;@en ;
+    rdfs:isDefinedBy &lt;&gt; ;
+    rdfs:subClassOf paia:PatronAccount .</code></pre>
+<p>Reasons for inactivation can be given with property <strong>paia:inactivationReason</strong>. The inactivation reasons <strong>paia:AccountExpired</strong> and <strong>paia:OutstandingFees</strong> SHOULD be linked to.</p>
+<pre class="ttl"><code>paia:inactivationReason a rdfs:Property ;
+    rdfs:label &quot;inactivationReason&quot;@en ; 
+    rdfs:isDefinedBy &lt;&gt; ;
+    rdfs:domain paia:InactivePatronAccount . 
+paia:AccountExpired a rdfs:Resource ;
+    rdfs:isDefinedBy &lt;&gt; ;
+    rdfs:label &quot;AccountExpired&quot;@en .
+paia:OutstandingFees a rdfs:Resource ;
+    rdfs:isDefinedBy &lt;&gt; ;
+    rdfs:label &quot;OutstandingFees&quot;@en .</code></pre>
+</section>
+<section id="items-in-rdf" class="level2">
+<h2><span class="header-section-number">2.3</span> Items in RDF</h2>
+<p>Lists of <a href="#document-data-type">documents</a>, as returned by the PAIA core methods <a href="#items">items</a>, <a href="#request">request</a>, <a href="#renew">renew</a>, and <a href="#cancel">cancel</a>, are represented as sets of events. Each event is an instance of <strong><a href="http://purl.org/ontology/ssso#ServiceEvent">ssso:ServiceEvent</a></strong> from the <a href="http://purl.org/ontology/ssso">Simple Service Status Ontology</a> (SSSO) and an instance of of a specific document service class defined in the <a href="http://gbv.github.io/dso/">Document Service Ontology</a> (DSO).</p>
+<p>The current <a href="#data-types">service status</a> of a document service event is given by an instance-relationship (rdf:type) with one of the following classes:</p>
+<ul>
+<li><a href="http://purl.org/ontology/ssso#ReservedService">ssso:ReservedService</a> for service status 1 (reserved)</li>
+<li><a href="http://purl.org/ontology/ssso#PreparedService">ssso:PreparedService</a> for service status 2 (ordered)</li>
+<li><a href="http://purl.org/ontology/ssso#ExecutedService">ssso:ExecutedService</a> for service status 3 (held)</li>
+<li><a href="http://purl.org/ontology/ssso#ProvidedService">ssso:ProvidedService</a> for service status 4 (provided)</li>
+<li><a href="http://purl.org/ontology/ssso#RejectedService">ssso:RejectedService</a> for service status 5 (rejected)</li>
+</ul>
+<p>The specific type of service is further given by in instance-relationship with on of the following classes (<em>this needs some clarification!</em>):</p>
+<ul>
+<li><a href="http://purl.org/ontology/dso#Loan">dso:Loan</a> (borrow to use at home for a limited time)</li>
+<li><a href="http://purl.org/ontology/dso#Presentation">dso:Presentation</a> (view/use within the boundaries of a library)</li>
+<li><a href="http://purl.org/ontology/dso#Interloan">dso:Interloan</a> (get a document/copy mediated from another library)</li>
+<li><a href="http://purl.org/ontology/dso#OpenAccess">dso:OpenAccess</a> (get directed to the location of a publicly available document)</li>
+</ul>
+<pre class="ttl"><code>ssso:ServiceEvent a owl:Class ;
+    rdfs:label &quot;ServiceEvent&quot;@en ;
+    rdfs:isDefinedBy &lt;http://purl.org/ontology/ssso&gt; .
+dso:DocumentService a owl:Class ;
+    rdfs:label &quot;DocumentService&quot;@en ;
+    rdfs:isDefinedBy &lt;http://purl.org/ontology/dso&gt; .
+dso:ServiceConsumer a owl:Class ;
+    rdfs:label &quot;ServiceConsumer&quot;@en ;
+    rdfs:isDefinedBy &lt;http://purl.org/ontology/service&gt; .</code></pre>
+<p>The service event is connected to a patron as <a href="http://purl.org/ontology/service#ServiceConsumer">service:ServiceConsumer</a> (with property <a href="http://purl.org/ontology/service#consumedBy">service:consumedBy</a>) and to a document (<em>with a property yet to be defined</em>).</p>
+<p>The <code>starttime</code> end <code>endtime</code> can be mapped to any of the following properties, among others:</p>
+<dl>
+<dt>starttime</dt>
+<dd>schema:startDate, prov:prov:startedAtTime, prov:qualifiedStart
+</dd>
+<dt>endtime</dt>
+<dd>schema:endDate, prov:endedAtTime, prov:qualifiedEnd
+</dd>
+</dl>
+</section>
+<section id="fees-in-rdf" class="level2">
+<h2><span class="header-section-number">2.4</span> Fees in RDF</h2>
+<p>A fee, as returned by the method <a href="#fees">fees</a>, is an amount of money that has to be paid by a patron for some reason. Each fee is represented by the following properties of a <code>ssso:ServiceEvent</code> instance:</p>
+<ul>
+<li><code>dc:date</code> (or a more specific sub property) for <code>fee.date</code></li>
+<li><code>schema:price</code> and <code>schema:priceCurrency</code> for <code>fee.amount</code></li>
+<li><code>dc:description</code> for <code>fee.about</code></li>
+<li>Maybe <code>schema:itemOffered</code> to connect to a document or document service (item and/or edition).</li>
+</ul>
+<p>The type of fee is represented by a class from the <a href="http://gbv.github.io/dso/">Document Service Ontology</a> or by another subclass of class <a href="http://purl.org/ontology/ssso#ServiceEvent">ServiceEvent</a> from the <a href="http://purl.org/ontology/ssso">Simple Service Status Ontology</a>. All URIs returned in <code>fee.feeid</code> SHOULD be resolvable as Linked Open Data.</p>
+</section>
+<section id="paia-data-types-in-rdf" class="level2">
+<h2><span class="header-section-number">2.5</span> PAIA data types in RDF</h2>
+<dl>
+<dt>string</dt>
+<dd>A Unicode string. Strings MAY be empty.
+</dd>
+<dt>nonnegative integer</dt>
+<dd>An integer number larger than or equal to zero.
+</dd>
+<dt>boolean</dt>
+<dd>Either true or false. Note that omitted boolean values are <em>not</em> false by default but unknown!
+</dd>
+<dt>date</dt>
+<dd>A date value in <code>YYYY-MM-DD</code> format. A datetime value with time and timezone SHOULD be used instead, if possible.
+</dd>
+<dt>datetime</dt>
+<dd><p>A date value in <code>YYY-MM-DD</code> format, optionally followed by a time value. A time value consists of the letter <code>T</code> followed by <code>hh:mm:ss</code> format, and a timezone indicator (<code>Z</code> for UTC or <code>+hh:mm</code> or <code>-hh:mm</code>) where:</p>
+<ul>
+<li><code>YYYY</code> indicates a year (<code>0001</code> through <code>9999</code>)</li>
+<li><code>MM</code> indicates a month (<code>01</code> through <code>12</code>)</li>
+<li><code>DD</code> indicates a day (<code>01</code> through <code>31</code>)</li>
+<li><code>hh</code> indicates an hour (<code>00</code> through <code>23</code>)</li>
+<li><code>mm</code> indicates a minute (<code>00</code> through <code>59</code>)</li>
+<li><code>ss</code> indicates a second (<code>00</code> through <code>59</code>)</li>
+</ul>
+<p>Examples of valid datetime values include <code>2015-03-20</code> (a date), <code>2016-03-09T11:58:19+10:00</code>, and <code>2017-08-21T12:24:28-06:00</code>.</p>
+</dd>
+<dt>money</dt>
+<dd>A monetary value with currency (format <code>[0-9]+\.[0-9][0-9] [A-Z][A-Z][A-Z]</code>), for instance <code>0.80 USD</code>.
+</dd>
+<dt>email</dt>
+<dd>A syntactically correct email address.
+</dd>
+<dt>URI</dt>
+<dd><p>A syntactically correct URI.</p>
+</dd>
+<dt>account state</dt>
+<dd><p>A nonnegative integer representing the current state of a patron account. Possible values are:</p>
+<ol start="0" type="1">
+<li>active</li>
+<li>inactive</li>
+<li>inactive because account expired</li>
+<li>inactive because of outstanding fees</li>
+<li>inactive because account expired and outstanding fees</li>
+</ol>
+<p>A PAIA server MAY define additional states which can be mapped to <code>1</code> by PAIA clients. In JSON account states MUST be encoded as numbers instead of strings.</p>
+</dd>
+<dt>service status</dt>
+<dd><p>A nonnegative integer representing the current status in fulfillment of a service. In most cases the service is related to a document, so the service status is a relation between a particular document and a particular patron. Possible values are:</p>
+<ol start="0" type="1">
+<li>no relation (this applies to most combinations of document and patron, and it can be expected if no other state is given)</li>
+<li>reserved (the document is not accessible for the patron yet, but it will be)</li>
+<li>ordered (the document is being made accessible for the patron)</li>
+<li>held (the document is on loan by the patron)</li>
+<li>provided (the document is ready to be used by the patron)</li>
+<li>rejected</li>
+</ol>
+<p>A PAIA server MUST NOT define any other service status. In JSON service status MUST be encoded as numbers instead of strings.</p>
+</dd>
+</dl>
+<section id="document-data-type" class="level3">
+<h3><span class="header-section-number">2.5.1</span> Document data type</h3>
+<p>A <strong>document</strong> is a key-value structure with the following fields</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">occ</th>
+<th style="text-align: center;">data type</th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>status</td>
+<td>1..1</td>
+<td>service status</td>
+<td>status (0, 1, 2, 3, 4, or 5)</td>
+</tr>
+<tr class="even">
+<td>item</td>
+<td>0..1</td>
+<td>URI</td>
+<td>URI of a particular copy</td>
+</tr>
+<tr class="odd">
+<td>edition</td>
+<td>0..1</td>
+<td>URI</td>
+<td>URI of a the document (no particular copy)</td>
+</tr>
+<tr class="even">
+<td>requested</td>
+<td>0..1</td>
+<td>URI</td>
+<td>URI that was originally requested</td>
+</tr>
+<tr class="odd">
+<td>about</td>
+<td>0..1</td>
+<td>string</td>
+<td>textual description of the document</td>
+</tr>
+<tr class="even">
+<td>label</td>
+<td>0..1</td>
+<td>string</td>
+<td>call number, shelf mark or similar item label</td>
+</tr>
+<tr class="odd">
+<td>queue</td>
+<td>0..1</td>
+<td>nonnegative integer</td>
+<td>number of waiting requests for the document or item</td>
+</tr>
+<tr class="even">
+<td>renewals</td>
+<td>0..1</td>
+<td>nonnegative integer</td>
+<td>number of times the document has been renewed</td>
+</tr>
+<tr class="odd">
+<td>reminder</td>
+<td>0..1</td>
+<td>nonnegative integer</td>
+<td>number of times the patron has been reminded</td>
+</tr>
+<tr class="even">
+<td>starttime</td>
+<td>0..1</td>
+<td>datetime</td>
+<td>date and time when the status began</td>
+</tr>
+<tr class="odd">
+<td>endtime</td>
+<td>0..1</td>
+<td>datetime</td>
+<td>date and time when the status will expire</td>
+</tr>
+<tr class="even">
+<td>duedate</td>
+<td>0..1</td>
+<td>date</td>
+<td>date when the current status will expire (<em>deprecated</em>)</td>
+</tr>
+<tr class="odd">
+<td>cancancel</td>
+<td>0..1</td>
+<td>boolean</td>
+<td>whether an ordered or provided document can be canceled</td>
+</tr>
+<tr class="even">
+<td>canrenew</td>
+<td>0..1</td>
+<td>boolean</td>
+<td>whether a document can be renewed</td>
+</tr>
+<tr class="odd">
+<td>error</td>
+<td>0..1</td>
+<td>string</td>
+<td>error message, for instance if a request was rejected</td>
+</tr>
+<tr class="even">
+<td>storage</td>
+<td>0..1</td>
+<td>string</td>
+<td>location of the document</td>
+</tr>
+<tr class="odd">
+<td>storageid</td>
+<td>0..1</td>
+<td>URI</td>
+<td>location URI</td>
+</tr>
+</tbody>
+</table>
+<p>For each document at least an item URI or an edition URI MUST be given. Together, item and edition URI MUST uniquely identify a document within the set of documents related to a patron.</p>
+<p>The fields <code>starttime</code> and <code>endtime</code> MUST be interpreted as following:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">status</th>
+<th style="text-align: center;">starttime</th>
+<th style="text-align: center;">endtime</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>when the document was reserved</td>
+<td>when the reserved document is expected to be available</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>when the document was ordered</td>
+<td>when the ordered document is expected to be available</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>when the document was lend</td>
+<td>when the loan period ends or ended (due)</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>when the document is provided</td>
+<td>when the provision will expire</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>when the request was rejected</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>Note that timezone information is mandatory in these fields. The field <code>duedate</code> is deprecated. Clients SHOULD only use it as <code>endtime</code> if no <code>endtime</code> was given.</p>
+<p>The response fields <code>label</code>, <code>storage</code>, <code>storageid</code>, and <code>queue</code> correspond to properties in DAIA.</p>
+<p><strong>Examples</strong></p>
+<p>An example of a documentserialized in JSON is given below. In this case a general document (<code>http://example.org/documents/9876543</code>) was requested an mapped to a particular copy (<code>http://example.org/items/barcode1234567</code>) by the PAIA server. The copy turned out to be lost, so the request was rejected (status 5) at 2014-07-12, 14:07 UTC.</p>
+<pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+   <span class="dt">&quot;status&quot;</span><span class="fu">:</span>    <span class="dv">5</span><span class="fu">,</span>
+   <span class="dt">&quot;item&quot;</span><span class="fu">:</span>      <span class="st">&quot;http://example.org/items/barcode1234567&quot;</span><span class="fu">,</span>
+   <span class="dt">&quot;edition&quot;</span><span class="fu">:</span>   <span class="st">&quot;http://example.org/documents/9876543&quot;</span><span class="fu">,</span>
+   <span class="dt">&quot;requested&quot;</span><span class="fu">:</span> <span class="st">&quot;http://example.org/documents/9876543&quot;</span><span class="fu">,</span>
+   <span class="dt">&quot;starttime&quot;</span><span class="fu">:</span> <span class="st">&quot;2014-07-12T14:07Z&quot;</span><span class="fu">,</span>
+   <span class="dt">&quot;error&quot;</span><span class="fu">:</span>     <span class="st">&quot;sorry, we found out that our copy is lost!&quot;</span>
+<span class="fu">}</span></code></pre>
+<p>See <a href="#documents-in-rdf">documents in RDF</a> for a mapping in RDF.</p>
+</section>
+<section id="patron" class="level3">
+<h3><span class="header-section-number">2.5.2</span> patron</h3>
+<dl>
+<dt>response fields</dt>
+<dd><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">occ</th>
+<th style="text-align: center;">data type</th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>name</td>
+<td>1..1</td>
+<td>string</td>
+<td>full name of the patron</td>
+</tr>
+<tr class="even">
+<td>email</td>
+<td>0..1</td>
+<td>email</td>
+<td>email address of the patron</td>
+</tr>
+<tr class="odd">
+<td>address</td>
+<td>0..1</td>
+<td>string</td>
+<td>freeform address of the patron</td>
+</tr>
+<tr class="even">
+<td>expires</td>
+<td>0..1</td>
+<td>datetime</td>
+<td>patron account expiry</td>
+</tr>
+<tr class="odd">
+<td>status</td>
+<td>0..1</td>
+<td>account state</td>
+<td>current state (0, 1, 2, or 3)</td>
+</tr>
+<tr class="even">
+<td>type</td>
+<td>0..n</td>
+<td>URI</td>
+<td>list of custom URIs to identify patron types</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p><strong>Example</strong></p>
+<pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+  <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;Jane Q. Public&quot;</span><span class="fu">,</span> 
+  <span class="dt">&quot;email&quot;</span><span class="fu">:</span> <span class="st">&quot;jane@example.org&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;address&quot;</span><span class="fu">:</span> <span class="st">&quot;Park Street 2, Springfield&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;expires&quot;</span><span class="fu">:</span> <span class="st">&quot;2015-05-18&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span>
+  <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;http://example.org/usertypes/default&quot;</span><span class="ot">]</span>
+<span class="fu">}</span></code></pre>
+</section>
+<section id="items" class="level3">
+<h3><span class="header-section-number">2.5.3</span> items</h3>
+<dl>
+<dt>response fields</dt>
+<dd><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">occ</th>
+<th style="text-align: center;">data type</th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>doc</td>
+<td>0..n</td>
+<td>document</td>
+<td>list of documents (order is irrelevant)</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>In most cases, each document will have an item URI for a particular copy, but users may also have requested an edition.</p>
+<p><strong>Example</strong></p>
+<pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+  <span class="dt">&quot;doc&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span>
+    <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span>
+    <span class="dt">&quot;item&quot;</span><span class="fu">:</span> <span class="st">&quot;http://bib.example.org/105359165&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;edition&quot;</span><span class="fu">:</span> <span class="st">&quot;http://bib.example.org/9782356&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;about&quot;</span><span class="fu">:</span> <span class="st">&quot;Maurice Sendak (1963): Where the wild things are&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;label&quot;</span><span class="fu">:</span> <span class="st">&quot;Y B SEN 101&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;queue&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span>
+    <span class="dt">&quot;renewals&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span>
+    <span class="dt">&quot;reminder&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span>
+    <span class="dt">&quot;starttime&quot;</span><span class="fu">:</span> <span class="st">&quot;2014-05-08T12:37Z&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;endtime&quot;</span><span class="fu">:</span> <span class="st">&quot;2014-06-09&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;cancancel&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span>
+  <span class="fu">}</span><span class="ot">,</span><span class="fu">{</span>
+    <span class="dt">&quot;status&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span>
+    <span class="dt">&quot;item&quot;</span><span class="fu">:</span> <span class="st">&quot;http://bib.example.org/8861930&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;about&quot;</span><span class="fu">:</span> <span class="st">&quot;Janet B. Pascal (2013): Who was Maurice Sendak?&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;label&quot;</span><span class="fu">:</span> <span class="st">&quot;BIO SED 03&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;queue&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span>
+    <span class="dt">&quot;starttime&quot;</span><span class="fu">:</span> <span class="st">&quot;2014-05-12T18:07Z&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;endtime&quot;</span><span class="fu">:</span> <span class="st">&quot;2014-05-24&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;cancancel&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span>
+    <span class="dt">&quot;storage&quot;</span><span class="fu">:</span> <span class="st">&quot;pickup service desk&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;storageid&quot;</span><span class="fu">:</span> <span class="st">&quot;http://bib.example.org/library/desk/7&quot;</span><span class="fu">,</span>
+  <span class="fu">}</span><span class="ot">]</span>
+<span class="fu">}</span></code></pre>
+</section>
+<section id="request" class="level3">
+<h3><span class="header-section-number">2.5.4</span> request</h3>
+<dl>
+<dt>request parameters</dt>
+<dd><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">occ</th>
+<th style="text-align: center;">data type</th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>doc</td>
+<td>1..n</td>
+<td></td>
+<td>list of documents requested</td>
+</tr>
+<tr class="even">
+<td>doc.item</td>
+<td>0..1</td>
+<td>URI</td>
+<td>URI of a particular item</td>
+</tr>
+<tr class="odd">
+<td>doc.edition</td>
+<td>0..1</td>
+<td>URI</td>
+<td>URI of a particular edition</td>
+</tr>
+<tr class="even">
+<td>doc.storage</td>
+<td>0..1</td>
+<td>string</td>
+<td>Requested pickup location</td>
+</tr>
+<tr class="odd">
+<td>doc.storageid</td>
+<td>0..1</td>
+<td>URI</td>
+<td>Requested pickup location</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>response fields</dt>
+<dd><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">occ</th>
+<th style="text-align: center;">data type</th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>doc</td>
+<td>1..n</td>
+<td>document</td>
+<td>list of documents (order is irrelevant)</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</section>
+<section id="renew" class="level3">
+<h3><span class="header-section-number">2.5.5</span> renew</h3>
+<dl>
+<dt>request parameters</dt>
+<dd><table>
+<tbody>
+<tr class="odd">
+<td>doc</td>
+<td>1..n</td>
+<td style="text-align: left;"></td>
+<td>list of documents to renew</td>
+</tr>
+<tr class="even">
+<td>doc.item</td>
+<td>0..1</td>
+<td style="text-align: left;">URI</td>
+<td>URI of a particular item</td>
+</tr>
+<tr class="odd">
+<td>doc.edition</td>
+<td>0..1</td>
+<td style="text-align: left;">URI</td>
+<td>URI of a particular edition</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>response fields</dt>
+<dd><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">occ</th>
+<th style="text-align: center;">data type</th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>doc</td>
+<td>1..n</td>
+<td>document</td>
+<td>list of documents (order is irrelevant)</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</section>
+<section id="cancel" class="level3">
+<h3><span class="header-section-number">2.5.6</span> cancel</h3>
+<dl>
+<dt>request parameters</dt>
+<dd><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">occ</th>
+<th style="text-align: center;">data type</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>doc</td>
+<td>1..n</td>
+<td></td>
+<td style="text-align: left;">list of documents to cancel</td>
+</tr>
+<tr class="even">
+<td>doc.item</td>
+<td>0..1</td>
+<td>URI</td>
+<td style="text-align: left;">URI of a particular item</td>
+</tr>
+<tr class="odd">
+<td>doc.edition</td>
+<td>0..1</td>
+<td>URI</td>
+<td style="text-align: left;">URI of a particular edition</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>response fields</dt>
+<dd><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">occ</th>
+<th style="text-align: center;">data type</th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>doc</td>
+<td>1..n</td>
+<td>document</td>
+<td>list of documents (order is irrelevant)</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</section>
+<section id="fees" class="level3">
+<h3><span class="header-section-number">2.5.7</span> fees</h3>
+<dl>
+<dt>response fields</dt>
+<dd><table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">name</th>
+<th style="text-align: center;">occ</th>
+<th style="text-align: center;">data type</th>
+<th style="text-align: center;">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>amount</td>
+<td>0..1</td>
+<td>money</td>
+<td>Sum of all fees. May also be negative!</td>
+</tr>
+<tr class="even">
+<td>fee</td>
+<td>0..n</td>
+<td></td>
+<td>list of fees</td>
+</tr>
+<tr class="odd">
+<td>fee.amount</td>
+<td>1..1</td>
+<td>money</td>
+<td>amount of a single fee</td>
+</tr>
+<tr class="even">
+<td>fee.date</td>
+<td>0..1</td>
+<td>date</td>
+<td>date when the fee was claimed</td>
+</tr>
+<tr class="odd">
+<td>fee.about</td>
+<td>0..1</td>
+<td>string</td>
+<td>textual information about the fee</td>
+</tr>
+<tr class="even">
+<td>fee.item</td>
+<td>0..1</td>
+<td>URI</td>
+<td>item that caused the fee</td>
+</tr>
+<tr class="odd">
+<td>fee.edition</td>
+<td>0..1</td>
+<td>URI</td>
+<td>edition that caused the fee</td>
+</tr>
+<tr class="even">
+<td>fee.feetype</td>
+<td>0..1</td>
+<td>string</td>
+<td>textual description of the type of fee</td>
+</tr>
+<tr class="odd">
+<td>fee.feeid</td>
+<td>0..1</td>
+<td>URI</td>
+<td>URI of the type of fee</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>If given, <code>fee.feetype</code> MUST NOT refer to the individual fee but to the type of fee. A PAIA server MUST return identical values of <code>fee.feetype</code> for identical <code>fee.feeid</code>. The default value of <code>fee.feeid</code> is:</p>
+<ul>
+<li><a href="http://purl.org/ontology/dso#DocumentService">http://purl.org/ontology/dso#DocumentService</a> if <code>fee.item</code> or <code>fee.edition</code> is set,</li>
+<li><a href="http://purl.org/ontology/service#Service">http://purl.org/ontology/service#Service</a> otherwise (<em>experimental!</em>).</li>
+</ul>
+<p>If a fee was caused by a document (<code>fee.item</code> or <code>fee.edition</code>), the value of <code>fee.feeid</code> SHOULD be a class URI from the <a href="http://gbv.github.io/dso/">Document Service Ontology</a>.</p>
+</section>
+</section>
+</section>
+<section id="references" class="level1">
+<h1><span class="header-section-number">3</span> References</h1>
+<section id="normative-references" class="level2">
+<h2><span class="header-section-number">3.1</span> Normative References</h2>
+<ul>
+<li><p>Voß, J. 2015. “Patrons Account Information API (PAIA)”. <a href="http://gbv.github.io/paia">http://gbv.github.io/paia</a></p></li>
+<li><p>Bradner, S. 1997. “RFC 2119: Key words for use in RFCs to Indicate Requirement Levels”. <a href="http://tools.ietf.org/html/rfc2119">http://tools.ietf.org/html/rfc2119</a>.</p></li>
+</ul>
+</section>
+<section id="informative-references" class="level2">
+<h2><span class="header-section-number">3.2</span> Informative References</h2>
+<ul>
+<li><p>Crockford, D. 2006. “RFC 6427: The application/json Media Type for JavaScript Object Notation (JSON)”. <a href="http://tools.ietf.org/html/rfc4627">http://tools.ietf.org/html/rfc4627</a>.</p></li>
+<li><p>Klee, C. and Voss, J. 2014. “Holding Ontology“. <a href="http://purl.org/ontology/holding">http://purl.org/ontology/holding</a>.</p></li>
+<li><p>Styles, Rob, Wallace, Chris and Moeller, Knud. 2008. “Participation schema“. <a href="http://vocab.org/participation/schema">http://vocab.org/participation/schema</a>.</p></li>
+<li><p>Voss, J. 2012. “DAIA ontology“. <a href="http://purl.org/ontology/daia">http://purl.org/ontology/daia</a>.</p></li>
+<li><p>Voss, J. 2013. “Simple Service Status Ontology“. <a href="http://purl.org/ontology/ssso">http://purl.org/ontology/ssso</a>.</p></li>
+<li><p>Voss, J. 2013. “Document Service Ontology“. <a href="http://gbv.github.io/dso/">http://gbv.github.io/dso/</a>.</p></li>
+</ul>
+</section>
+<section id="revision-history" class="level2">
+<h2><span class="header-section-number">3.3</span> Revision history</h2>
+<p>The current version of this document was last modified at 2015-04-16 with revision <a href="http://github.com/gbv/paia-rdf/commit/294029f21648def2ac518c821817af942725d01c">294029f</a>.</p>
+<ul>
+<li><a href="paia-294029f.html"><code>2015-04-16 09:20:29 +0200</code></a>: <a href="http://github.com/gbv/paia-rdf/commit/294029f21648def2ac518c821817af942725d01c">split from PAIA specification</a></li>
+</ul>
+</section>
+</section>
+</body>
+</html>
